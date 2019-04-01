@@ -1,0 +1,155 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GIF</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascrpt" src="GIFtastic/GIFlogic.js"></script>
+
+
+
+</head>
+
+
+
+<body class="html">
+    <div class="container-fluid mx-3">
+
+        <div class="row mt-2 ">
+
+            <div id="button-view ">
+
+            </div>
+
+
+            <div class="row mt-5 p-5 ">
+
+                <div class="col-8-lg"></div>
+                <div class="col-4-lg p-5">
+                    <form class="form-control-lg pr-5">
+
+                        <div class="">
+                           
+                            <label for="animals">Add an animal</label>
+                            <input type="" class="form-control form-control-lg" id="AddMore">
+                       
+                        </div>
+
+                        <button type="submit" id="submit" class="btn btn-info mt-2">Submit</button>
+                    </form>
+                </div>
+
+
+            </div>
+            <div class="row">
+                    <div id="animal-view"></div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    
+<script>
+
+// Array of animal list
+
+var AnimalList = [
+    "dog", "cat", "godfish","chunk","bird", "turtle", "sugar glider","chinchilla",
+    "hermitcrab", "capybara", "pygmy goat", "chicken", "teacup pig", "frog","salamander"];
+
+// creating a function to hold ajax
+
+function AnimalListDisplay (){
+var AnimalType = $(this).attr("data type");
+var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + AnimalType + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+
+
+$.ajax({
+    url: queryURL,
+    method: "GET"
+}).then(function(response){
+// Creating a div to hold the animals
+
+var AnimalDiv = $("<div>");
+// Storing the type data
+
+var Type = response.Type;
+
+// displaying the type data
+
+var displayType = $("<p>").text("Type: " + Type);
+// appending displaytype to the Animal div
+
+AnimalDiv.append(displayType);
+
+// getting image information 
+var imgURL = response.images;
+var images= $("<img>").attr("src", imgURL);
+AnimalDiv.append(images);
+
+$("#animal-view").prepend(AnimalDiv);
+
+
+
+
+});
+ // Function for displaying the animal list
+ function Buttons() {
+
+    $("#buttons-view").empty();
+
+    // Looping through the array of animals
+    for (var i = 0; i < AnimalList.length; i++) {
+
+      var a = $("<button>");
+      a.addClass("mybutton");
+      a.attr("data-name", AnimalList[i]);
+      a.text(AnimalList[i])
+      $("#buttons-view").append(a);
+     
+    }
+    Console.log(Buttons);
+  }
+
+  // The function handles events where an animal button is clicked
+  $("#submit").on("click", function(event) {
+    event.preventDefault();
+
+    var Animal = $("#AddMore").val().trim();
+
+    AnimalList.push(Animal);
+
+    Buttons();
+  });
+
+  // Adding a click event listener to all elements with a class of "mybutton"
+  $(document).on("click", ".mybutton", AnimalListDisplay);
+
+  // Calling the renderButtons function to display the intial buttons
+  Buttons();
+
+
+Console.log(AnimalListDisplay);
+
+
+}
+
+
+
+</script>
+
+
+</body>
+
+
+
+
+</html>
